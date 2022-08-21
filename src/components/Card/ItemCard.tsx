@@ -8,7 +8,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 
 type Props = {
 	name: string
-	price: number | undefined
+	price: number | string | undefined
 	clickOnDelete: (value: string) => void
 }
 

@@ -1,9 +1,9 @@
 import { configureStore } from "@reduxjs/toolkit";
-import mainSlice from "./slices/mainSlice";
+import tickersSlice from "./slices/tickersSlice";
 import { useDispatch } from "react-redux";
 const store = configureStore({
 	reducer: {
-		mainSlice
+		tickersSlice
 	}
 })
 

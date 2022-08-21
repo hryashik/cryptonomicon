@@ -1,30 +1,37 @@
 import './app.scss'
 import { Button } from "@mui/material";
 import TextField from "@mui/material/TextField";
-import React, { useEffect } from "react";
+import React from "react";
 import { useSelector } from "react-redux";
 import { RootState, useAppDispatch } from "./store/store";
-import { addItem, changeInputValue, deleteItem, fetchData } from "./store/slices/mainSlice";
+import { addItem, changeInputValue, deleteItem, subscribeTicker } from "./store/slices/tickersSlice";
 import ItemCard from "./components/Card/ItemCard";
 
 const App: React.FC = () => {
 	function clickOnAdd() {
-		dispatch(fetchData(inputValue))
+		let intervalId = setInterval(() => dispatch(subscribeTicker(inputValue)), 3000)
+		dispatch(addItem({ name: inputValue, intervalId }))
 	}
-	function clickOnDelete(value: string) {
-		dispatch(deleteItem(value))
+
+	function clickOnDelete(name: string) {
+		dispatch(deleteItem(name))
+		clearInterval(items.find(el => el.name === name)?.intervalId)
 	}
+
+	function keyDownInput(e: any) {
+		if (e.key === 'Enter') {
+			let intervalId = setInterval(() => dispatch(subscribeTicker(inputValue)), 3000)
+			dispatch(addItem({ name: inputValue, intervalId }))
+		}
+	}
+
 	const dispatch = useAppDispatch()
 	const changeInput = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>): void => {
 		dispatch(changeInputValue(e.target.value))
 	}
-	const keyDownInput = (e: any) => {
-		if (e.key === 'Enter') {
-			dispatch(addItem(inputValue))
-		}
-	}
-	const inputValue = useSelector((state: RootState) => state.mainSlice.inputValue)
-	const items = useSelector((state: RootState) => state.mainSlice.items)
+
+	const inputValue = useSelector((state: RootState) => state.tickersSlice.inputValue)
+	const items = useSelector((state: RootState) => state.tickersSlice.items)
 	return (
 		<div className={'app'}>
 			<div className={'searchWrapper'}>
@@ -44,6 +51,7 @@ const App: React.FC = () => {
 					Add
 				</Button>
 			</div>
+			{items.length ? <hr style={{ marginBottom: '15px' }}/> : ''}
 			<div className={'cardWrapper'}>
 				{items.map(item =>
 					<ItemCard name={item.name} price={item.price} clickOnDelete={clickOnDelete} key={item.name}/>
