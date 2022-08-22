@@ -9,6 +9,7 @@ type Item = {
 	name: string
 	price?: number | string
 	intervalId: NodeJS.Timer
+	priceHistory: number[]
 }
 
 type InitialStateType = {
@@ -34,27 +35,34 @@ const tickersSlice = createSlice({
 			state.inputValue = action.payload
 		},
 		addItem(state, action: PayloadAction<AddItemType>) {
-			const obj = {name: action.payload.name, price: '-', intervalId: action.payload.intervalId}
+			const obj = {
+				name: action.payload.name,
+				price: '-',
+				intervalId: action.payload.intervalId,
+				priceHistory: []
+			}
 			state.items.push(obj)
 			state.inputValue = ''
 		},
 		deleteItem(state, action: PayloadAction<string>) {
 			state.items = state.items.filter(item => item.name !== action.payload)
 		},
-/*		fetchData(state, action: PayloadAction<string>) {
-			const obj = {name: action.payload, price: 0}
-			state.items.push(obj)
-		}*/
 	},
 	extraReducers: (builder) => {
 		builder.addCase(subscribeTicker.fulfilled, (state, action) => {
 			const ref = state.items.find(el => el.name === action.meta.arg)
-			if (ref) {
+			if (ref && action.payload.USD) {
 				ref.price = action.payload.USD
+				if (ref.priceHistory.length < 30) {
+					ref.priceHistory.push(action.payload.USD)
+				} else {
+					ref.priceHistory.shift()
+					ref.priceHistory.push(action.payload.USD)
+				}
 			}
 		})
 	}
 })
 
-export const {changeInputValue, addItem, deleteItem} = tickersSlice.actions
+export const { changeInputValue, addItem, deleteItem } = tickersSlice.actions
 export default tickersSlice.reducer

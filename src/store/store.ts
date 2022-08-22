@@ -1,9 +1,11 @@
 import { configureStore } from "@reduxjs/toolkit";
 import tickersSlice from "./slices/tickersSlice";
 import { useDispatch } from "react-redux";
+import graphSlice from "./slices/graphSlice";
 const store = configureStore({
 	reducer: {
-		tickersSlice
+		tickersSlice,
+		graphSlice
 	}
 })
 

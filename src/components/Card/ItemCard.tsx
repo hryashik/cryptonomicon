@@ -5,16 +5,26 @@ import CardContent from '@mui/material/CardContent';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import DeleteIcon from '@mui/icons-material/Delete';
+import styles from './ItemCard.module.scss'
+import { selectTicker } from "../../store/slices/graphSlice";
+import { useAppDispatch } from "../../store/store";
 
 type Props = {
 	name: string
 	price: number | string | undefined
-	clickOnDelete: (value: string) => void
+	clickOnDelete: (e: React.FormEvent, value: string) => void
 }
 
 export default function ItemCard({ name, price, clickOnDelete }: Props) {
+	const dispatch = useAppDispatch()
+	function clickOnCard() {
+		dispatch(selectTicker(name))
+	}
 	return (
-		<Card sx={{ marginBottom: '20px',maxWidth: 275, backgroundColor: 'ghostwhite' }}>
+		<Card onClick={clickOnCard}
+					className={styles.card}
+					sx={{backgroundColor: 'ghostwhite'}}
+		>
 			<CardContent>
 				<Typography variant="h5" component="div">
 					{name}
@@ -28,12 +38,12 @@ export default function ItemCard({ name, price, clickOnDelete }: Props) {
 			</CardContent>
 			<CardActions>
 				<Button
-					onClick={() => clickOnDelete(name)}
+					onClick={(e) => clickOnDelete(e, name)}
 					startIcon={<DeleteIcon/>}
 					variant={"contained"}
 					size="medium"
 					color={"primary"}
-					sx={{display: 'flex', alignItems: 'center'}}
+					sx={{ display: 'flex', alignItems: 'center' }}
 				>
 					Delete
 				</Button>

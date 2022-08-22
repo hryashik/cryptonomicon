@@ -1,0 +1,9 @@
+.card {
+  max-width: 275px;
+  margin-bottom: 25px;
+  background-color: red;
+
+  :hover {
+    cursor: pointer;
+  }
+}

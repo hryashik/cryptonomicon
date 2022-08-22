@@ -6,6 +6,7 @@ import { useSelector } from "react-redux";
 import { RootState, useAppDispatch } from "./store/store";
 import { addItem, changeInputValue, deleteItem, subscribeTicker } from "./store/slices/tickersSlice";
 import ItemCard from "./components/Card/ItemCard";
+import Graph from "./components/Graph/Graph";
 
 const App: React.FC = () => {
 	function clickOnAdd() {
@@ -13,7 +14,8 @@ const App: React.FC = () => {
 		dispatch(addItem({ name: inputValue, intervalId }))
 	}
 
-	function clickOnDelete(name: string) {
+	function clickOnDelete(e: React.FormEvent, name: string) {
+		e.stopPropagation()
 		dispatch(deleteItem(name))
 		clearInterval(items.find(el => el.name === name)?.intervalId)
 	}
@@ -29,9 +31,10 @@ const App: React.FC = () => {
 	const changeInput = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>): void => {
 		dispatch(changeInputValue(e.target.value))
 	}
-
 	const inputValue = useSelector((state: RootState) => state.tickersSlice.inputValue)
 	const items = useSelector((state: RootState) => state.tickersSlice.items)
+	const graphIsSeen = useSelector((state: RootState) => state.graphSlice.isSeen)
+
 	return (
 		<div className={'app'}>
 			<div className={'searchWrapper'}>
@@ -57,6 +60,13 @@ const App: React.FC = () => {
 					<ItemCard name={item.name} price={item.price} clickOnDelete={clickOnDelete} key={item.name}/>
 				)}
 			</div>
+			{graphIsSeen ? <hr style={{ marginBottom: '15px' }}/> : ''}
+			{graphIsSeen ?
+				<div className={'graph'}>
+					<Graph/>
+				</div>
+				: ''
+			}
 		</div>
 	)
 }
