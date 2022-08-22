@@ -36,4 +36,7 @@
 .closeIcon {
   position: absolute;
   right: 300px;
+  :hover {
+    cursor: pointer;
+  }
 }

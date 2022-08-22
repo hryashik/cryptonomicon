@@ -1,9 +1,14 @@
 import styles from './Graph.module.scss'
 import { useSelector } from "react-redux";
-import { RootState } from "../../store/store";
+import { RootState, useAppDispatch } from "../../store/store";
 import CloseIcon from '@mui/icons-material/Close';
+import { hiddenGraph } from "../../store/slices/graphSlice";
 
 const Graph = () => {
+	const dispatch = useAppDispatch()
+	function clickOnClose() {
+		dispatch(hiddenGraph())
+	}
 	const { isSeen, currentTicker } = useSelector((state: RootState) => state.graphSlice)
 	const ticker = useSelector((state: RootState) => state.tickersSlice.items.find(item => item.name === currentTicker))
 	const prices = ticker?.priceHistory
@@ -20,7 +25,7 @@ const Graph = () => {
 	} else {
 		return (
 			<div className={styles.wrapper}>
-				<div className={styles.closeIcon}><CloseIcon/></div>
+				<div onClick={clickOnClose} className={styles.closeIcon}><CloseIcon/></div>
 				<h3 className={styles.title}>{currentTicker}</h3>
 				<div className={styles.columns}>
 					{historyMapped}

@@ -13,8 +13,12 @@ const graphSlice = createSlice({
 			state.currentTicker = action.payload
 			state.isSeen = true
 		},
+		hiddenGraph(state) {
+			state.isSeen = false
+			state.currentTicker = ''
+		}
 	}
 })
 
-export const {selectTicker} = graphSlice.actions
+export const {selectTicker, hiddenGraph} = graphSlice.actions
 export default graphSlice.reducer
