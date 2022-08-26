@@ -9,18 +9,10 @@ body {
 .app {
   padding: 20px;
 }
-.searchWrapper {
-  margin-bottom: 20px;
-  max-width: 300px;
-  display: flex;
-  flex-direction: column;
-  button {
-    width: 150px;
-  }
-}
 .cardWrapper {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
+  justify-items: center;
 }
 .graph {
   padding: 10px 30px;

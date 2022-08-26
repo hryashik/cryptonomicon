@@ -4,8 +4,6 @@
   padding: 15px;
   border-radius: 20px;
   min-height: 320px;
-/*  border-left: 1px solid black;
-  border-bottom: 1px solid black;*/
   box-shadow: -1px 1px 2px grey;
   text-align: center;
   footer {
@@ -13,12 +11,28 @@
     .content {
       display: flex;
       justify-content: space-between;
+      p:first-child {
+        margin-bottom: 5px;
+        margin-left: 3px;
+      }
+      &__right {
+        display: flex;
+        justify-content: space-between;
+        p {
+          margin: 2px 0px 0 5px;
+        }
+      }
     }
   }
-}
-.title {
-  text-transform: uppercase;
-  margin-bottom: 30px;
+  &__title {
+    margin-bottom: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    .title {
+      text-transform: uppercase;
+    }
+  }
 }
 .columns {
   height: 240px;
@@ -34,8 +48,9 @@
   }
 }
 .closeIcon {
-  position: absolute;
-  right: 300px;
+  padding-top: 3px;
+  position: relative;
+  left: 300px;
   :hover {
     cursor: pointer;
   }

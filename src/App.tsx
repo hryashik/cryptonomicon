@@ -1,59 +1,40 @@
 import './app.scss'
 import { Button } from "@mui/material";
-import TextField from "@mui/material/TextField";
 import React from "react";
 import { useSelector } from "react-redux";
 import { RootState, useAppDispatch } from "./store/store";
-import { addItem, changeInputValue, deleteItem, subscribeTicker } from "./store/slices/tickersSlice";
+import { addItem, deleteItem, subscribeTicker } from "./store/slices/tickersSlice";
 import ItemCard from "./components/Card/ItemCard";
 import Graph from "./components/Graph/Graph";
+import AutoInput from "./components/Autocomplete/AutoInput";
+import { hiddenGraph } from "./store/slices/graphSlice";
 
 const App: React.FC = () => {
+	const dispatch = useAppDispatch()
+	// Selectors
+	const { inputValue, items } = useSelector((state: RootState) => state.tickersSlice)
+	const graphIsSeen = useSelector((state: RootState) => state.graphSlice.isSeen)
+	const currentTicker = useSelector((state: RootState) => state.graphSlice.currentTicker)
+	//Handlers
 	function clickOnAdd() {
 		let intervalId = setInterval(() => dispatch(subscribeTicker(inputValue)), 3000)
 		dispatch(addItem({ name: inputValue, intervalId }))
 	}
-
 	function clickOnDelete(e: React.FormEvent, name: string) {
 		e.stopPropagation()
 		dispatch(deleteItem(name))
 		clearInterval(items.find(el => el.name === name)?.intervalId)
-	}
-
-	function keyDownInput(e: any) {
-		if (e.key === 'Enter') {
-			let intervalId = setInterval(() => dispatch(subscribeTicker(inputValue)), 3000)
-			dispatch(addItem({ name: inputValue, intervalId }))
+		if (name === currentTicker) {
+			dispatch(hiddenGraph())
 		}
 	}
 
-	const dispatch = useAppDispatch()
-	const changeInput = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>): void => {
-		dispatch(changeInputValue(e.target.value))
-	}
-	const inputValue = useSelector((state: RootState) => state.tickersSlice.inputValue)
-	const items = useSelector((state: RootState) => state.tickersSlice.items)
-	const graphIsSeen = useSelector((state: RootState) => state.graphSlice.isSeen)
-
 	return (
 		<div className={'app'}>
-			<div className={'searchWrapper'}>
-				<TextField
-					autoFocus={true}
-					variant={"outlined"}
-					label={'Cryptocurrency'}
-					sx={{ marginBottom: '5px' }}
-					value={inputValue}
-					onChange={(event) => changeInput(event)}
-					onKeyDown={(e) => keyDownInput(e)}
-				/>
-				<Button
-					onClick={clickOnAdd}
-					variant="outlined"
-				>
-					Add
-				</Button>
-			</div>
+			<AutoInput/>
+			<Button onClick={clickOnAdd} variant="outlined">
+				Add
+			</Button>
 			{items.length ? <hr style={{ marginBottom: '15px' }}/> : ''}
 			<div className={'cardWrapper'}>
 				{items.map(item =>

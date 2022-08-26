@@ -7,7 +7,11 @@ import Typography from '@mui/material/Typography';
 import DeleteIcon from '@mui/icons-material/Delete';
 import styles from './ItemCard.module.scss'
 import { selectTicker } from "../../store/slices/graphSlice";
-import { useAppDispatch } from "../../store/store";
+import { RootState, useAppDispatch } from "../../store/store";
+import ArrowUp from "@mui/icons-material/ArrowUpward";
+import ArrowDown from "@mui/icons-material/ArrowDownward";
+import SyncAltIcon from "@mui/icons-material/SyncAlt";
+import { useSelector } from "react-redux";
 
 type Props = {
 	name: string
