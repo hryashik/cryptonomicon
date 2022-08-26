@@ -22,6 +22,7 @@ export default function AutoInput() {
 	}
 	return (
 		<Autocomplete
+			value={{label: inputValue}}
 			disablePortal
 			id="combo-box-demo"
 			options={topCoins}
@@ -30,7 +31,6 @@ export default function AutoInput() {
 			renderInput={(params) => <TextField autoFocus={true}
 																					variant={"outlined"}
 																					sx={{ marginBottom: '5px' }}
-																					value={inputValue}
 																					onChange={(event) => changeInput(event)}
 																					onKeyDown={(e) => keyDownInput(e)} {...params} label="Coin"/>}
 		/>
