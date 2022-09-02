@@ -22,6 +22,7 @@ export default function AutoInput() {
 	}
 	return (
 		<Autocomplete
+			freeSolo
 			value={{label: inputValue}}
 			disablePortal
 			id="combo-box-demo"

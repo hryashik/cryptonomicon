@@ -17,6 +17,7 @@ const App: React.FC = () => {
 	const currentTicker = useSelector((state: RootState) => state.graphSlice.currentTicker)
 	//Handlers
 	function clickOnAdd() {
+		console.log(items)
 		let intervalId = setInterval(() => dispatch(subscribeTicker(inputValue)), 3000)
 		dispatch(addItem({ name: inputValue, intervalId }))
 	}
@@ -32,7 +33,7 @@ const App: React.FC = () => {
 	return (
 		<div className={'app'}>
 			<AutoInput/>
-			<Button onClick={clickOnAdd} variant="outlined">
+			<Button style={{marginBottom: '15px'}} onClick={clickOnAdd} variant="outlined">
 				Add
 			</Button>
 			{items.length ? <hr style={{ marginBottom: '15px' }}/> : ''}
