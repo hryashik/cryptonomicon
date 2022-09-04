@@ -6,11 +6,10 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import DeleteIcon from '@mui/icons-material/Delete';
 import styles from './ItemCard.module.scss'
-import { selectTicker } from "../../store/slices/graphSlice";
+import { hiddenGraph, selectTicker } from "../../store/slices/graphSlice";
 import { RootState, useAppDispatch } from "../../store/store";
-import ArrowUp from "@mui/icons-material/ArrowUpward";
-import ArrowDown from "@mui/icons-material/ArrowDownward";
-import SyncAltIcon from "@mui/icons-material/SyncAlt";
+import CloseIcon from "@mui/icons-material/Close";
+import { deleteItem } from "../../store/slices/tickersSlice";
 import { useSelector } from "react-redux";
 
 type Props = {
@@ -20,9 +19,17 @@ type Props = {
 }
 
 export default function ItemCard({ name, price, clickOnDelete }: Props) {
+	const currentTicker = useSelector((state: RootState) => state.graphSlice.currentTicker)
 	const dispatch = useAppDispatch()
 	function clickOnCard() {
 		dispatch(selectTicker(name))
+	}
+	function clickOnCloseIcon(event: any) {
+		event.stopPropagation()
+		dispatch(deleteItem(name))
+		if (currentTicker === name) {
+			dispatch(hiddenGraph())
+		}
 	}
 	return (
 		<Card onClick={clickOnCard}
@@ -30,9 +37,12 @@ export default function ItemCard({ name, price, clickOnDelete }: Props) {
 					sx={{backgroundColor: 'ghostwhite'}}
 		>
 			<CardContent>
-				<Typography variant="h5" component="div">
-					{name}
-				</Typography>
+				<div className={styles.title}>
+					<Typography variant="h5" component="div">
+						{name}
+					</Typography>
+					<CloseIcon onClick={clickOnCloseIcon}/>
+				</div>
 				<Typography sx={{ mb: 1.5 }} color="text.secondary">
 					USD
 				</Typography>

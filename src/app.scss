@@ -7,6 +7,7 @@ body {
   background-color: ghostwhite;
 }
 .app {
+  position: relative;
   padding: 20px;
 }
 .cardWrapper {
@@ -16,5 +17,24 @@ body {
 }
 .graph {
   padding: 10px 30px;
+}
+.alert {
+  width: 350px;
+  height: 50px;
+  top: 40px;
+  left: 50%;
+  transform:translate(-50%, -50%);
+  position: absolute;
+  animation: slideIn 0.5s;
+  @keyframes slideIn {
+    from {
+      opacity: 0;
+      left: 900px;
+    }
+    to {
+      opacity: 1;
+      left: 50%;
+    }
+  }
 }
 

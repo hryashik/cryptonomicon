@@ -1,6 +1,6 @@
 import './app.scss'
 import { Button } from "@mui/material";
-import React from "react";
+import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import { RootState, useAppDispatch } from "./store/store";
 import { addItem, deleteItem, subscribeTicker } from "./store/slices/tickersSlice";
@@ -8,19 +8,29 @@ import ItemCard from "./components/Card/ItemCard";
 import Graph from "./components/Graph/Graph";
 import AutoInput from "./components/Autocomplete/AutoInput";
 import { hiddenGraph } from "./store/slices/graphSlice";
+import CustomAlert from "./components/CustomAlert/CustomAlert";
 
 const App: React.FC = () => {
+	const [ alert, setAlert ] = useState(false)
+	const [ colorInput, setColorInput ] = useState<'primary' | 'error'>('primary')
 	const dispatch = useAppDispatch()
 	// Selectors
 	const { inputValue, items } = useSelector((state: RootState) => state.tickersSlice)
 	const graphIsSeen = useSelector((state: RootState) => state.graphSlice.isSeen)
 	const currentTicker = useSelector((state: RootState) => state.graphSlice.currentTicker)
+
 	//Handlers
 	function clickOnAdd() {
-		console.log(items)
-		let intervalId = setInterval(() => dispatch(subscribeTicker(inputValue)), 3000)
-		dispatch(addItem({ name: inputValue, intervalId }))
+		//Делаю проверку: новый коин не добавиться, если такой коин уже есть (проверка по регистру), а также проверка на пустое поле
+		if (items.find(item => item.name.toLowerCase() === inputValue.toLowerCase()) || !inputValue) {
+			setAlert(true)
+			setTimeout(() => setAlert(false), 3000)
+		} else {
+			let intervalId = setInterval(() => dispatch(subscribeTicker(inputValue)), 3000)
+			dispatch(addItem({ name: inputValue, intervalId }))
+		}
 	}
+
 	function clickOnDelete(e: React.FormEvent, name: string) {
 		e.stopPropagation()
 		dispatch(deleteItem(name))
@@ -32,8 +42,13 @@ const App: React.FC = () => {
 
 	return (
 		<div className={'app'}>
-			<AutoInput/>
-			<Button style={{marginBottom: '15px'}} onClick={clickOnAdd} variant="outlined">
+			{alert ?
+				<div className="alert">
+					<CustomAlert/>
+				</div> : ""
+			}
+			<AutoInput colorInput={colorInput}/>
+			<Button style={{ marginBottom: '15px' }} onClick={clickOnAdd} variant="outlined">
 				Add
 			</Button>
 			{items.length ? <hr style={{ marginBottom: '15px' }}/> : ''}
@@ -42,12 +57,13 @@ const App: React.FC = () => {
 					<ItemCard name={item.name} price={item.price} clickOnDelete={clickOnDelete} key={item.name}/>
 				)}
 			</div>
-			{graphIsSeen ? <hr style={{ marginBottom: '15px' }}/> : ''}
 			{graphIsSeen ?
-				<div className={'graph'}>
-					<Graph/>
-				</div>
-				: ''
+				<>
+					<hr style={{ marginBottom: '15px' }}/>
+					<div className={'graph'}>
+						<Graph/>
+					</div>
+				</> : ''
 			}
 		</div>
 	)

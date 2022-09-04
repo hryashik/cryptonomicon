@@ -1,9 +1,13 @@
 .card {
   min-width: 275px;
   margin-bottom: 25px;
-  background-color: red;
 
   :hover {
     cursor: pointer;
   }
+}
+.title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }

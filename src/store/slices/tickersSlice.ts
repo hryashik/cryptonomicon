@@ -45,6 +45,8 @@ const tickersSlice = createSlice({
 			state.inputValue = ''
 		},
 		deleteItem(state, action: PayloadAction<string>) {
+			const intervalId = state.items.find(item => item.name === action.payload)?.intervalId
+			clearInterval(intervalId)
 			state.items = state.items.filter(item => item.name !== action.payload)
 		},
 	},
