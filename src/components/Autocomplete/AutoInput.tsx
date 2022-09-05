@@ -5,26 +5,23 @@ import { useSelector } from "react-redux";
 import { RootState, useAppDispatch } from "../../store/store";
 import { addItem, changeInputValue, subscribeTicker } from "../../store/slices/tickersSlice";
 
-type Props = {
-	colorInput: 'primary' | 'error'
-}
-
-export default function AutoInput({colorInput}: Props) {
+export default function AutoInput() {
 	const dispatch = useAppDispatch()
 	const inputValue = useSelector((state: RootState) => state.tickersSlice.inputValue)
 	const changeInput = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>): void => {
 		dispatch(changeInputValue(e.target.value))
 	}
 
-	function keyDownInput(e: any) {
+	function keyDownInput(e: React.KeyboardEvent<HTMLDivElement>) {
 		if (e.key === 'Enter') {
 			let intervalId = setInterval(() => dispatch(subscribeTicker(inputValue)), 3000)
 			dispatch(addItem({ name: inputValue, intervalId }))
 		}
 	}
 
-	function changeComplete(event: any) {
-		dispatch(changeInputValue(event.currentTarget.innerText))
+	function changeComplete(event: React.SyntheticEvent) {
+		let target = event.target as HTMLInputElement
+		dispatch(changeInputValue(target.innerText))
 	}
 	return (
 		<Autocomplete
@@ -38,7 +35,7 @@ export default function AutoInput({colorInput}: Props) {
 			renderInput={(params) =>
 				<TextField
 					autoFocus={true}
-					color={colorInput}
+					color="primary"
 					variant={"outlined"}
 					sx={{ marginBottom: '5px' }}
 					onChange={(event) => changeInput(event)}

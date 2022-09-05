@@ -12,7 +12,6 @@ import CustomAlert from "./components/CustomAlert/CustomAlert";
 
 const App: React.FC = () => {
 	const [ alert, setAlert ] = useState(false)
-	const [ colorInput, setColorInput ] = useState<'primary' | 'error'>('primary')
 	const dispatch = useAppDispatch()
 	// Selectors
 	const { inputValue, items } = useSelector((state: RootState) => state.tickersSlice)
@@ -21,7 +20,7 @@ const App: React.FC = () => {
 
 	//Handlers
 	function clickOnAdd() {
-		//Делаю проверку: новый коин не добавиться, если такой коин уже есть (проверка по регистру), а также проверка на пустое поле
+		//Делаю проверку: новый коин не добавится, если такой коин уже есть (проверка по регистру), а так же проверка на пустое поле
 		if (items.find(item => item.name.toLowerCase() === inputValue.toLowerCase()) || !inputValue) {
 			setAlert(true)
 			setTimeout(() => setAlert(false), 3000)
@@ -47,7 +46,7 @@ const App: React.FC = () => {
 					<CustomAlert/>
 				</div> : ""
 			}
-			<AutoInput colorInput={colorInput}/>
+			<AutoInput/>
 			<Button style={{ marginBottom: '15px' }} onClick={clickOnAdd} variant="outlined">
 				Add
 			</Button>

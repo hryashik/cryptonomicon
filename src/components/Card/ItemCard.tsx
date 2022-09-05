@@ -24,7 +24,7 @@ export default function ItemCard({ name, price, clickOnDelete }: Props) {
 	function clickOnCard() {
 		dispatch(selectTicker(name))
 	}
-	function clickOnCloseIcon(event: any) {
+	function clickOnCloseIcon(event: React.MouseEvent<SVGSVGElement>) {
 		event.stopPropagation()
 		dispatch(deleteItem(name))
 		if (currentTicker === name) {
